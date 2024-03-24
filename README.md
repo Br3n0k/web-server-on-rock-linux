@@ -76,7 +76,7 @@ Sobre a versão
 
 ```sh
 sudo dnf update -y
-curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo bash -
+curl -fsSL https://rpm.nodesource.com/setup_21.x | sudo bash -
 sudo dnf install -y nodejs
 node -v
 npm -v
