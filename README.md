@@ -31,7 +31,7 @@ ______
 sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm
 sudo dnf config-manager --set-enabled remi
 sudo dnf module enable php:remi-8.3
-sudo dnf install php php-cli php-gd php-curl php-zip php-mbstring php-fpm php-opcache
+sudo dnf install php-{common,gmp,fpm,curl,intl,pdo,mbstring,gd,xml,cli,zip,mysqli,opcache}
 sudo dnf update && sudo dnf upgrade
 ```
 
