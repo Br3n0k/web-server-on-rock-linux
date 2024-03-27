@@ -90,16 +90,31 @@ composer --version
 ______
 ## Instalar Nginx
 
+1. Download e instalação do nginx
 ```
 sudo dnf install nginx
+nginx -v
+```
+
+2. Inicialização e Habilitação do start automatico do nginx
+```
 sudo systemctl enable --now nginx
-sudo systemctl start php-fpm
+sudo systemctl start nginx
+```
+
+3. Liberando o serviço e as portas no firewall
+```
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
 sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
 sudo firewall-cmd --permanent --zone=public --add-port=443/tcp
-nginx -v
 ```
+
+4. Reload no firewall para reconhecer as novas regras
+```
+firewall-cmd --reload
+```
+
 ______
 ## Instalar o MariaDB
 
@@ -154,4 +169,54 @@ chcon -R -t httpd_sys_content_t /home/www/seusite
 >Você pode optar por utilizar portas diferentes, e somente a liberação no firewall não é o suficiente, você deve listar essa porta como http para que o nginx possa escrever no socket
 ```sh
 semanage port -a -t http_port_t  -p tcp 8090
+```
+
+> Se o servidor for para um framework Laravel é preciso:
+
+1. Verificar as permições nas pastas do laravel com usuario utilizado para o nginx
+```
+chown -R nginx:nginx /var/www/html/laravelsite/storage/
+chown -R nginx:nginx /var/www/html/laravelsite/bootstrap/cache/
+chmod -R 0777 /var/www/html/laravelsite/storage/
+chmod -R 0775 /var/www/html/laravelsite/bootstrap/cache/
+```
+
+2. Crie um arquivo de configurações para o laravel
+```
+/etc/nginx/conf.d/laravel.conf
+```
+```
+server {
+       listen 80;
+       server_name laravel.yourdomain.com;
+       root        /var/www/html/laravelsite/public;
+       index       index.php;
+       charset utf-8;
+       gzip on;
+	      gzip_types text/css application/javascript text/javascript application/x-javascript  image/svg+xml text/plain text/xsd text/xsl text/xml image/x-icon;
+        location / {
+        	try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php {
+                include fastcgi.conf;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass unix:/run/php-fpm/www.sock;
+        }
+
+        location ~ /\.ht {
+                deny all;
+        }
+}
+```
+
+3. Verifique a estrutura do arquivo de configurações do nginx
+```
+nginx -t
+```
+
+4. Restart nos serviços do nginx e php
+```
+systemctl restart php-fpm
+systemctl restart nginx
 ```
