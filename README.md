@@ -175,10 +175,13 @@ semanage port -a -t http_port_t  -p tcp 8090
 
 1. Verificar as permições nas pastas do laravel com usuario utilizado para o nginx
 ```
-chown -R nginx:nginx /var/www/html/laravelsite/storage/
-chown -R nginx:nginx /var/www/html/laravelsite/bootstrap/cache/
-chmod -R 0777 /var/www/html/laravelsite/storage/
-chmod -R 0775 /var/www/html/laravelsite/bootstrap/cache/
+sudo -R nginx:nginx /srv/www/hosts/brendown.tech/public_html/storage/
+sudo -R nginx:nginx /srv/www/hosts/brendown.tech/public_html/bootstrap/cache/
+sudo -R 0777 /srv/www/hosts/brendown.tech/public_html/storage/
+sudo -R 0775 /srv/www/hosts/brendown.tech/public_html/bootstrap/cache/
+sudo chown -R :www-data /srv/www/hosts/brendown.tech/public_html
+sudo chmod -R 777 /srv/www/hosts/brendown.tech/public_html/storage
+sudo chmod -R 777 /srv/www/hosts/brendown.tech/public_html/database
 ```
 
 2. Crie um arquivo de configurações para o laravel
