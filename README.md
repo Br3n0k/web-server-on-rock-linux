@@ -27,12 +27,36 @@ sudo dnf install git
 ______
 ## Instalar o PHP
 
+1. Faça o download e instalação do PHP
 ```
 sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm
 sudo dnf config-manager --set-enabled remi
 sudo dnf module enable php:remi-8.3
 sudo dnf install php-{common,gmp,fpm,curl,intl,pdo,mbstring,gd,xml,cli,zip,mysqli,opcache,soap,json,mysqlnd} -y
 sudo dnf update && sudo dnf upgrade
+```
+
+2. Inicie e Habilite o PHP para inicialização automatica
+```
+sudo systemctl start php-fpm
+sudo systemctl enable php-fpm
+```
+
+3. Edite no arquivo /etc/php-fpm.d/www.conf
+```
+listen.owner = nginx
+listen.group = nginx
+```
+
+4. Edite no arquivo /etc/php.ini
+```
+date.timezone = UTC
+cgi.fix_pathinfo=1
+```
+
+5. Restart no serviço do PHP
+```
+systemctl restart php-fpm
 ```
 
 ______
@@ -50,6 +74,7 @@ ______
 ```
 sudo dnf install nginx
 sudo systemctl enable --now nginx
+sudo systemctl start php-fpm
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
 sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
