@@ -61,10 +61,29 @@ systemctl restart php-fpm
 
 ______
 ## Instalar o Composer
+
+1. Faça o download do wget
 ```
 dnf -y install wget
+```
+
+2. Faça o download do composer
+```
 wget https://getcomposer.org/installer -O composer-installer.php
+```
+
+3. Instale o Composer
+```
 php composer-installer.php --filename=composer --install-dir=/usr/local/bin 
+```
+
+4. Adicione as permissões sobre o arquivo do composer
+```
+chmod +x /usr/local/bin/composer
+```
+
+5. Verifique se tudo deu certo confirmando a versão do composer
+```
 composer --version
 ```
 
