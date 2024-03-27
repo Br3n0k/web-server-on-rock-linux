@@ -98,3 +98,16 @@ curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.r
 sudo rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg
 sudo dnf install yarn
 ```
+
+## Observações
+Notas
+> [!IMPORTANT]
+> Alguns problemas podem surgir com o SElinux para quando mudar o diretorio da pasta de publicação do nginx, o comando abaixo permite você liberar o diretorio para publicação
+```sh
+chcon -R -t httpd_sys_content_t /home/www/seusite
+```
+
+>Você pode optar por utilizar portas diferentes, e somente a liberação no firewall não é o suficiente, você deve listar essa porta como http para que o nginx possa escrever no socket
+```sh
+semanage port -a -t http_port_t  -p tcp 8090
+```
